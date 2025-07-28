@@ -1,0 +1,13 @@
+# Ignore build output
+.next/
+out/
+
+# Ignore dependencies
+node_modules/
+
+# Ignore npm/yarn/pnpm logs and caches
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+UsersRemonAppDataRoamingnpm-cache/
