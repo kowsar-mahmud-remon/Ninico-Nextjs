@@ -1,16 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [""],
-    unoptimized: true,
+    domains: ["localhost", "your-production-domain.com"],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    formats: ['image/webp'],
   },
   webpack: (config) => {
     config.resolve.fallback = { fs: false };
     return config;
   },
   reactStrictMode: true,
-  trailingSlash: true,
-  output: "export",
+  poweredByHeader: false,
+  compress: true,
+  swcMinify: true,
 };
 
 module.exports = nextConfig;

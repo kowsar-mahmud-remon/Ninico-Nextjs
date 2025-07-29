@@ -1,59 +1,63 @@
-'use client'
-import { useEffect, useState } from "react"
+'use client';
+import { useEffect, useState } from 'react';
 
-const msInSecond = 1000
-const msInMinute = 60 * 1000
-const msInAHour = 60 * msInMinute
-const msInADay = 24 * msInAHour
+const msInSecond = 1000;
+const msInMinute = 60 * msInSecond;
+const msInAHour = 60 * msInMinute;
+const msInADay = 24 * msInAHour;
 
 const getPartsofTimeDuration = (duration) => {
-    const days = Math.floor(duration / msInADay)
-    const hours = Math.floor((duration % msInADay) / msInAHour)
-    const minutes = Math.floor((duration % msInAHour) / msInMinute)
-    const seconds = Math.floor((duration % msInMinute) / msInSecond)
+  const days = Math.floor(duration / msInADay);
+  const hours = Math.floor((duration % msInADay) / msInAHour);
+  const minutes = Math.floor((duration % msInAHour) / msInMinute);
+  const seconds = Math.floor((duration % msInMinute) / msInSecond);
+  return { days, hours, minutes, seconds };
+};
 
-    return { days, hours, minutes, seconds }
-}
+const Countdown = ({ endDateTime }) => {
+  const [hydrated, setHydrated] = useState(false);
+  const [timeParts, setTimeParts] = useState(getPartsofTimeDuration(0));
 
-const Countdown = (endDateTime) => {
-    const [time, setTime] = useState(new Date().toLocaleTimeString())
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            const date = new Date()
-            setTime(date.toLocaleTimeString())
-        }, 1000)
-        return () => {
-            clearTimeout(timeout)
-        }
-    }, [time])
+  useEffect(() => {
+    if (!hydrated) return;
 
-    const now = Date.now() // Number of milliseconds from begining of time
+    const updateCountdown = () => {
+      const now = Date.now();
+      const future = new Date(endDateTime);
+      const timeDif = future.getTime() - now;
+      setTimeParts(getPartsofTimeDuration(timeDif));
+    };
 
-    const future = new Date(endDateTime.endDateTime) // The day we leave for Japan
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, [hydrated, endDateTime]);
 
-    const timeDif = future.getTime() - now
-    const timeParts = getPartsofTimeDuration(timeDif)
+  if (!hydrated) return null;
 
-    // const countDownTime = `${timeParts.days} Days ${timeParts.hours} Hours and ${timeParts.minutes} minutes and ${timeParts.seconds} seconds`;
-    return (
-        <>
-            <span className="cdown days"> <span className="time-count">{timeParts.days}</span>
-                <p>Days</p>
-            </span>
-            <span className="cdown hour"> <span className="time-count">{timeParts.hours}</span>
-                <p>Hour</p>
-            </span>
-            <span className="cdown minutes"> <span className="time-count">{timeParts.minutes}</span>
-                <p>Minute</p>
-            </span>
-            <span className="cdown second"> <span className="time-count">{timeParts.seconds}</span>
-                <p>Second</p>
-            </span>
+  return (
+    <>
+      <span className="cdown days">
+        <span className="time-count">{timeParts.days}</span>
+        <p>Days</p>
+      </span>
+      <span className="cdown hour">
+        <span className="time-count">{timeParts.hours}</span>
+        <p>Hour</p>
+      </span>
+      <span className="cdown minutes">
+        <span className="time-count">{timeParts.minutes}</span>
+        <p>Minute</p>
+      </span>
+      <span className="cdown second">
+        <span className="time-count">{timeParts.seconds}</span>
+        <p>Second</p>
+      </span>
+    </>
+  );
+};
 
-
-        </>
-    )
-}
-
-export default Countdown
+export default Countdown;

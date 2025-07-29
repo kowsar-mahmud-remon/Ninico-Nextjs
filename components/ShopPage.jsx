@@ -2,6 +2,7 @@
 import Layout from "@/components/layout/Layout";
 import products from "@/data/products";
 import { addCart, addQty } from "@/features/shopSlice";
+import OptimizedImage from './elements/OptimizedImage';
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -735,14 +736,19 @@ const ShopPage = ({ product }) => {
                   <div className="tpproduct pb-15 mb-30">
                     <div className="tpproduct__thumb p-relative">
                       <Link href="/shop-details-2">
-                        <img
+                        <OptimizedImage
                           src="/assets/img/product/product-1.jpg"
                           alt="product-thumb"
+                          width={300}
+                          height={400}
+                          className="w-full h-auto"
                         />
-                        <img
-                          className="product-thumb-secondary"
+                        <OptimizedImage
                           src="/assets/img/product/product-2.jpg"
-                          alt=""
+                          alt="Product secondary view"
+                          width={300}
+                          height={400}
+                          className="product-thumb-secondary w-full h-auto"
                         />
                       </Link>
                       <div className="tpproduct__thumb-action">
