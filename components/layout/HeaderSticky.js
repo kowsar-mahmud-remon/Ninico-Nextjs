@@ -2,6 +2,7 @@ import Link from "next/link"
 import CartShow from "../elements/CartShow"
 import WishListShow from "../elements/WishListShow"
 
+
 export default function HeaderSticky({ scroll, isCartSidebar, handleCartSidebar }) {
     return (
         <>

@@ -1,18 +1,26 @@
 
 'use client'
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
+import dynamic from 'next/dynamic'
 import BackToTop from '../elements/BackToTop'
-import DataBg from "../elements/DataBg"
-import Breadcrumb from './Breadcrumb'
-import HeaderCart from "./HeaderCart"
-import Sidebar from "./Sidebar"
-import Footer1 from './footer/Footer1'
-import Footer2 from './footer/Footer2'
-import Header1 from "./header/Header1"
-import Header2 from './header/Header2'
-import Header3 from "./header/Header3"
-import Header4 from "./header/Header4"
-import Header5 from "./header/Header5"
+import Loading from '@/app/loading'
+
+// Dynamically import heavy components
+const DataBg = dynamic(() => import('../elements/DataBg'), { ssr: false })
+const Breadcrumb = dynamic(() => import('./Breadcrumb'))
+const HeaderCart = dynamic(() => import('./HeaderCart'))
+const Sidebar = dynamic(() => import('./Sidebar'))
+
+// Dynamically import footer components
+const Footer1 = dynamic(() => import('./footer/Footer1'))
+const Footer2 = dynamic(() => import('./footer/Footer2'))
+
+// Dynamically import header based on style
+const Header1 = dynamic(() => import('./header/Header1'))
+const Header2 = dynamic(() => import('./header/Header2'))
+const Header3 = dynamic(() => import('./header/Header3'))
+const Header4 = dynamic(() => import('./header/Header4'))
+const Header5 = dynamic(() => import('./header/Header5'))
 
 export default function Layout({ headerStyle, footerStyle, headTitle, breadcrumbTitle, children }) {
     const [scroll, setScroll] = useState(0)
@@ -25,19 +33,25 @@ export default function Layout({ headerStyle, footerStyle, headTitle, breadcrumb
     const handleCartSidebar = () => setCartSidebar(!isCartSidebar)
 
     useEffect(() => {
-        const WOW = require('wowjs')
-        window.wow = new WOW.WOW({
-            live: false
-        })
-        window.wow.init()
+        // Lazy load WOW.js only on client side
+        if (typeof window !== 'undefined') {
+            import('wowjs').then((WOW) => {
+                new WOW.WOW({
+                    live: false
+                }).init()
+            })
+        }
 
-        document.addEventListener("scroll", () => {
+        const handleScroll = () => {
             const scrollCheck = window.scrollY > 100
             if (scrollCheck !== scroll) {
                 setScroll(scrollCheck)
             }
-        })
-    }, [])
+        }
+
+        document.addEventListener("scroll", handleScroll)
+        return () => document.removeEventListener("scroll", handleScroll)
+    }, [scroll])
     return (
         <>
             {/* <PageHead headTitle={headTitle} /> */}

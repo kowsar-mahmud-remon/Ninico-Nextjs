@@ -3,6 +3,7 @@ import { addQty, deleteCart } from "@/features/shopSlice"
 import Link from "next/link"
 import { useDispatch, useSelector } from "react-redux"
 
+
 export default function HeaderCart({ isCartSidebar, handleCartSidebar }) {
     const { cart } = useSelector((state) => state.shop) || {}
 
